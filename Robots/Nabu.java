@@ -1,4 +1,4 @@
-package MyRobots;
+package MyRobots.Robots;
 
 import static robocode.util.Utils.normalRelativeAngleDegrees; //Angles above 360
 
@@ -14,14 +14,7 @@ public class Nabu extends Robot {
 		setAdjustGunForRobotTurn(true);
 
 		while (true) {
-			double X = getX();
-			if (X > getX()) {
-				out.println("Macham se lufo w prawo");
-				turnGunRight(10);
-			} else {
-				out.println("Macham se lufo w lewo");
-				turnGunLeft(10);
-			}
+
 		}
 	}
 
@@ -30,7 +23,6 @@ public class Nabu extends Robot {
 		turnGunRight(turnGunAngle);
 		if (Math.abs(turnGunAngle) < 4) {
 			if (getGunHeat() == 0) {
-				out.println("GunHeat = 0");
 				if (getEnergy() > 10) {
 					fire(Math.max(300 / event.getDistance(), 1));
 				} else {
