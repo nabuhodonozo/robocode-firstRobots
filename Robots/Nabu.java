@@ -8,13 +8,14 @@ import robocode.Robot;
 import robocode.ScannedRobotEvent;
 
 public class Nabu extends Robot {
+	double direction = -1;
 	public void run() {
 
 		setAllColors(Color.magenta);
 		setAdjustGunForRobotTurn(true);
-
+		
 		while (true) {
-
+			turnGunRight(360);
 		}
 	}
 
@@ -39,8 +40,6 @@ public class Nabu extends Robot {
 	}
 
 	public void onHitWall(HitWallEvent event) {
-		back(10);
-		turnLeft(180 - event.getBearing());
+		direction *= -1;
 	}
-
 }
