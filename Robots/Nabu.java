@@ -9,16 +9,32 @@ import robocode.ScannedRobotEvent;
 
 public class Nabu extends Robot {
 	double direction = -1;
+	double enemySide = 1;
+	boolean recentlyChanged = false;
+	
 	public void run() {
-
 		setAllColors(Color.magenta);
 		setAdjustGunForRobotTurn(true);
 		
 		while (true) {
-			turnGunRight(360);
+			
+			if(recentlyChanged) {
+				if((enemySide>0 && direction>0) || (enemySide<0 && direction<0)) {
+					turnGunRight(360);
+				}else if((enemySide<0 && direction>0) || (enemySide>0 && direction<0)) {
+					turnGunLeft(360);
+				}
+				recentlyChanged = false;
+			}else {
+				if((enemySide>0 && direction>0) || (enemySide<0 && direction<0)) {
+					turnGunLeft(360);
+				}else if((enemySide<0 && direction>0) || (enemySide>0 && direction<0)) {
+					turnGunRight(360);
+				}
+			}		
 		}
 	}
-
+	
 	public void onScannedRobot(ScannedRobotEvent event) {
 		double turnGunAngle = normalRelativeAngleDegrees(getHeading() + event.getBearing() - getGunHeading());
 		turnGunRight(turnGunAngle);
@@ -34,12 +50,14 @@ public class Nabu extends Robot {
 				} else {
 					turnRight(90 + event.getBearing());
 				}
-				ahead(100);
+				ahead(100*direction);
 			}
 		}
 	}
 
 	public void onHitWall(HitWallEvent event) {
 		direction *= -1;
+		recentlyChanged = true;
 	}
+
 }
