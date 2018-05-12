@@ -16,8 +16,8 @@ public class Nabu extends Robot {
 		setAllColors(Color.magenta);
 		setAdjustGunForRobotTurn(true);
 		
+		turnGunRight(360);
 		while (true) {
-			
 			if(recentlyChanged) {
 				if((enemySide>0 && direction>0) || (enemySide<0 && direction<0)) {
 					turnGunRight(360);
