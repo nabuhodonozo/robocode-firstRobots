@@ -10,31 +10,32 @@ import robocode.ScannedRobotEvent;
 public class Nabu extends Robot {
 	double direction = -1;
 	double enemySide = 1;
+	final int CurvingAngle = 50;
 	boolean recentlyChanged = false;
-	
+
 	public void run() {
 		setAllColors(Color.magenta);
 		setAdjustGunForRobotTurn(true);
-		
-		turnGunRight(360);
+
 		while (true) {
-			if(recentlyChanged) {
-				if((enemySide>0 && direction>0) || (enemySide<0 && direction<0)) {
-					turnGunRight(360);
-				}else if((enemySide<0 && direction>0) || (enemySide>0 && direction<0)) {
+			if (recentlyChanged) {
+				if ((enemySide > 0 && direction > 0) || (enemySide < 0 && direction < 0)) {
 					turnGunLeft(360);
+				} else if ((enemySide < 0 && direction > 0) || (enemySide > 0 && direction < 0)) {
+					turnGunRight(360);
 				}
 				recentlyChanged = false;
-			}else {
-				if((enemySide>0 && direction>0) || (enemySide<0 && direction<0)) {
-					turnGunLeft(360);
-				}else if((enemySide<0 && direction>0) || (enemySide>0 && direction<0)) {
+
+			} else {
+				if ((enemySide > 0 && direction > 0) || (enemySide < 0 && direction < 0)) {
 					turnGunRight(360);
+				} else if ((enemySide < 0 && direction > 0) || (enemySide > 0 && direction < 0)) {
+					turnGunLeft(360);
 				}
-			}		
+			}
 		}
 	}
-	
+
 	public void onScannedRobot(ScannedRobotEvent event) {
 		double turnGunAngle = normalRelativeAngleDegrees(getHeading() + event.getBearing() - getGunHeading());
 		turnGunRight(turnGunAngle);
@@ -44,13 +45,26 @@ public class Nabu extends Robot {
 					fire(Math.max(300 / event.getDistance(), 1));
 				} else {
 					fire(Math.min(getEnergy() / 10, 0.1));
-				}
-				if (event.getBearing() >= 0) {
-					turnLeft(90 - event.getBearing());
+				} // Consider going back... TO DO!
+				//paradoksalnie mam gorsze wyniki ...
+				//bo sie zaczina na kazdej scianie teraz
+				if (direction < 0) {
+					out.println("Jezdze se na wstecznym");					//debuggin
+					if (event.getBearing() >= 0) {
+						turnLeft(90 + CurvingAngle - event.getBearing());
+					} else {
+						turnRight(90 + CurvingAngle + event.getBearing());
+					}
 				} else {
-					turnRight(90 + event.getBearing());
+					out.println("Jezdze se do przodu");						//debuggin
+					if (event.getBearing() >= 0) {
+						turnLeft(90 - CurvingAngle - event.getBearing());
+					} else {
+						turnRight(90 - CurvingAngle + event.getBearing());
+					}
 				}
-				ahead(100*direction);
+				ahead(100 * direction);
+				enemySide = event.getBearing();
 			}
 		}
 	}
@@ -59,5 +73,4 @@ public class Nabu extends Robot {
 		direction *= -1;
 		recentlyChanged = true;
 	}
-
 }
