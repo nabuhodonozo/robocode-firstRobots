@@ -10,8 +10,9 @@ import robocode.ScannedRobotEvent;
 public class Nabu extends Robot {
 	double direction = -1;
 	double enemySide = 1;
+	final int CurvingAngle = 50;
 	boolean recentlyChanged = false;
-
+ 
 	public void run() {
 		setAllColors(Color.magenta);
 		setAdjustGunForRobotTurn(true);
@@ -44,11 +45,11 @@ public class Nabu extends Robot {
 					fire(Math.max(300 / event.getDistance(), 1));
 				} else {
 					fire(Math.min(getEnergy() / 10, 0.1));
-				}
+				}//Consider going back... TO DO!
 				if (event.getBearing() >= 0) {
-					turnLeft(40 - event.getBearing());
+					turnLeft(90 - CurvingAngle - event.getBearing());
 				} else {
-					turnRight(140 + event.getBearing());
+					turnRight(90 +  CurvingAngle + event.getBearing());
 				}
 				ahead(100 * direction);
 				enemySide = event.getBearing();
