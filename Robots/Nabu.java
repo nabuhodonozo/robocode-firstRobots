@@ -10,7 +10,7 @@ import robocode.ScannedRobotEvent;
 public class Nabu extends Robot {
 	double direction = -1;
 	double enemySide = 1;
-	final int CurvingAngle = 50;
+	int CurvingAngle = 40;
 	boolean recentlyChanged = false;
 
 	public void run() {
@@ -45,18 +45,15 @@ public class Nabu extends Robot {
 					fire(Math.max(300 / event.getDistance(), 1));
 				} else {
 					fire(Math.min(getEnergy() / 10, 0.1));
-				} // Consider going back... TO DO!
-				//paradoksalnie mam gorsze wyniki ...
-				//bo sie zaczina na kazdej scianie teraz
-				if (direction < 0) {
-					out.println("Jezdze se na wstecznym");					//debuggin
+				}
+				CurvingAngle = (int) (event.getDistance()/10);
+				if (direction < 0) {	
 					if (event.getBearing() >= 0) {
 						turnLeft(90 + CurvingAngle - event.getBearing());
 					} else {
 						turnRight(90 + CurvingAngle + event.getBearing());
 					}
 				} else {
-					out.println("Jezdze se do przodu");						//debuggin
 					if (event.getBearing() >= 0) {
 						turnLeft(90 - CurvingAngle - event.getBearing());
 					} else {
